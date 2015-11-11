@@ -29,7 +29,8 @@ void Board::printState(){
 	for (int i = 0; i < 8; i++){
 		for (int j = 0; j < 8; j++){
 			if (state[i][j]==0){ std::cout << "|" << ' '; }
-			else{ std::cout << "|" << state[i][j]; }
+			else if (state[i][j] == 1){ std::cout << "|" << 1; }
+			else if (state[i][j] == 8){ std::cout << "|" << 8; }
 		}
 		std::cout << "|" << std::endl;
 	}
@@ -66,9 +67,12 @@ void Board::tetrisDrop(){
 }
 
 
-bool Board::applyMove(unsigned short col, bool turn){
-	if (col > 7 || col < 0){
-		std::cout << "invalid move: columns are 0-7" << std::endl;
+bool Board::applyMove(unsigned int col, bool turn){
+	col = col - 1; //easier to enter 1-8 then 0-7
+	
+	//unsigned short means 0-1 > 0
+	if (col > 7){
+		std::cout << "invalid move: columns are 1-8" << std::endl;
 		return false;
 	}
 
@@ -78,7 +82,7 @@ bool Board::applyMove(unsigned short col, bool turn){
 	else{ piece = 8; }
 	std::cout << " piece it " << piece << std::endl;
 	if (col_fill[col] > 7){
-		std::cout << "invalid move: column "<< col << "is full" << std::endl;
+		std::cout << "invalid move: column "<< col << " is full" << std::endl;
 		return false;
 	}
 	else{
@@ -92,4 +96,8 @@ bool Board::applyMove(unsigned short col, bool turn){
 
 void Board::getPos(int x, int y){
 	std::cout << state[x][y] << std::endl;
+}
+
+bool Board::testWin(){
+	return true;
 }

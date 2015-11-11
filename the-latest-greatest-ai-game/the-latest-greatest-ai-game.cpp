@@ -8,7 +8,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	Board p = Board();
 	bool flag = true;
-	unsigned short col;
+	unsigned int col;
 	while (true){
 		std::cin >> col;
 		p.applyMove(col, flag);
