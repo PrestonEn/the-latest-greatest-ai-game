@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <io.h>
+#include <fcntl.h>
+
 #include "targetver.h"
 #include "Board.h"
 

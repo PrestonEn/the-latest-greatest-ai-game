@@ -60,7 +60,6 @@ void Board::tetrisDrop(){
 				if (i == 0) state[i][j] = 0;
 				else state[i][j] = state[i-1][j];
 			}
-
 			col_fill[i]--;
 		}
 	}
@@ -94,10 +93,21 @@ bool Board::applyMove(unsigned int col, bool turn){
 	}
 }
 
-void Board::getPos(int x, int y){
-	std::cout << state[x][y] << std::endl;
-}
 
-bool Board::testWin(){
+bool Board::testWin(bool turn){
+	int piece;
+
+	if (turn) piece = 1;
+	else piece = 8;
+
+	for (int i = 0; i < 8; ++i){
+		for (int j = 0; j < 8; ++j){
+			if (state[i][j] == 0){
+				/// do nothing
+			}else if(state[i][j]==piece){
+				/// check 
+			}
+		}
+	}
 	return true;
 }

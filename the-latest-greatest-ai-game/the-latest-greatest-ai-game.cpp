@@ -4,19 +4,23 @@
 #include "stdafx.h"
 
 
+
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	Board p = Board();
 	bool flag = true;
+	bool win = false;
 	unsigned int col;
-	while (true){
+
+	while (!win){
 		std::cin >> col;
 		p.applyMove(col, flag);
 		flag = !flag;
 	}
 
 
-	getchar();
 	return 0;
 }
 

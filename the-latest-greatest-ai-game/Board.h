@@ -32,7 +32,8 @@ public:
 	///<summary>
 	///Tests the board for a string of 4, with horizontal wrapping
 	///</summary>
-	bool Board::testWin();
+	///<param name="turn">Player who's turn we are testing or win condition on</param>
+	bool Board::testWin(bool turn);
 
 private:
 	///used to indicate min or max
