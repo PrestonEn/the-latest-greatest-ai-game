@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="BoardNode.h" />
     <ClInclude Include="MinMax.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

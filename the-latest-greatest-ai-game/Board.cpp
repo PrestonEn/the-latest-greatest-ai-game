@@ -97,7 +97,6 @@ bool Board::applyMove(unsigned int col, bool turn){
 
 bool Board::testWin(bool turn){
 	int piece;
-
 	if (turn) piece = 1;
 	else piece = 8;
 
@@ -131,7 +130,7 @@ bool Board::testWin(bool turn){
 					}
 					if (count >= 4)
 					{
-						std::cout << "win for player at " << i << "," << j << "right lean" << std::endl;
+						std::cout << "win for player at " << i << "," << j << "left lean" << std::endl;
 						return true;
 					}
 					///end right lean case
@@ -146,10 +145,9 @@ bool Board::testWin(bool turn){
 					}
 					if (count >= 4)
 					{
-						std::cout << "win for player at " << i << "," << j << "left lean" << std::endl;
+						std::cout << "win for player at " << i << "," << j << "right lean" << std::endl;
 						return true;
 					}
-
 				}
 				///end vertical case
 
