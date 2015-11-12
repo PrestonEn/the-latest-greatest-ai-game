@@ -24,7 +24,7 @@ Board::Board(Board& genetic){
 	_play_state = genetic.state;
 }
 
-
+ 
 void Board::printState(){
 	for (int i = 0; i < 8; i++){
 		for (int j = 0; j < 8; j++){
@@ -79,9 +79,9 @@ bool Board::applyMove(unsigned int col, bool turn){
 	std::cout << "turn is " << turn;
 	if (turn){ piece = 1; }
 	else{ piece = 8; }
-	std::cout << " piece it " << piece << std::endl;
+	std::cout << " piece is " << piece << std::endl;
 	if (col_fill[col] > 7){
-		std::cout << "invalid move: column "<< col << " is full" << std::endl;
+		std::cout << "invalid move: column "<< col+1 << " is full" << std::endl;
 		return false;
 	}
 	else{
@@ -94,6 +94,7 @@ bool Board::applyMove(unsigned int col, bool turn){
 }
 
 
+
 bool Board::testWin(bool turn){
 	int piece;
 
@@ -104,10 +105,68 @@ bool Board::testWin(bool turn){
 		for (int j = 0; j < 8; ++j){
 			if (state[i][j] == 0){
 				/// do nothing
-			}else if(state[i][j]==piece){
-				/// check 
+			}else if(state[i][j]==piece ){
+				/// vertical case
+				if (i > 2){
+					int vertCount = 1;
+					int vertPos = i;
+					while (state[vertPos][j] == piece){
+						vertPos--;
+						if (state[vertPos][j] == piece) vertCount++;
+					}
+					if (vertCount >= 4)
+					{
+						std::cout << "win for player at " << i << "," << j << "vertical" << std::endl;
+						return true;
+					}
+					///right lean case
+					int count = 1;
+					int horPos = j;
+					vertPos = i;
+					while (state[vertPos][horPos] == piece){
+						horPos--;
+						vertPos--;
+						if (horPos == -1) horPos = 7;
+						if (state[vertPos][horPos] == piece) count++;
+					}
+					if (count >= 4)
+					{
+						std::cout << "win for player at " << i << "," << j << "right lean" << std::endl;
+						return true;
+					}
+					///end right lean case
+					count = 1;
+					horPos = j;
+					vertPos = i;
+					while (state[vertPos][horPos] == piece){
+						horPos++;
+						vertPos--;
+						if (horPos == 8) horPos = 0;
+						if (state[vertPos][horPos] == piece) count++;
+					}
+					if (count >= 4)
+					{
+						std::cout << "win for player at " << i << "," << j << "left lean" << std::endl;
+						return true;
+					}
+
+				}
+				///end vertical case
+
+				///horizontal case
+				int horCount = 1;
+				int horPos = j;
+				while (state[i][horPos] == piece){
+					horPos--;
+					if (horPos == -1) horPos = 7;
+					if (state[i][horPos] == piece) horCount++;
+				}
+				if (horCount >= 4){
+					std::cout << "win for player at " << i << "," << j << "horizontal" << std::endl;
+					return true;
+				}
 			}
 		}
 	}
-	return true;
+	return false;
 }

@@ -4,9 +4,6 @@
 #include "stdafx.h"
 
 
-
-
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	Board p = Board();
@@ -17,10 +14,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	while (!win){
 		std::cin >> col;
 		p.applyMove(col, flag);
+		win = p.testWin(flag);
+
 		flag = !flag;
 	}
 
 
+	int q;
+	std::cout << "Press any key to quit!";
+	std::cin >> q;
 	return 0;
 }
 

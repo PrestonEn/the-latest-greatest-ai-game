@@ -9,7 +9,7 @@
 #include <tchar.h>
 #include <io.h>
 #include <fcntl.h>
-
+#include <Windows.h>
 #include "targetver.h"
 #include "Board.h"
 
