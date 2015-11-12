@@ -12,6 +12,6 @@
 #include <Windows.h>
 #include "targetver.h"
 #include "Board.h"
-
+#include "BoardNode.h"
 
 // TODO: reference additional headers your program requires here
