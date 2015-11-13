@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+
 #include "Board.h"
 
 
@@ -36,8 +37,9 @@ public:
 
 	Board b; //!<considered state
 	BoardNode* parent;
-	BoardNode* children[8]; //!<insert childern into the index based on move
+	std::list<BoardNode*> children; //!<insert childern into the index based on move
 	int score; //!<don't want to write a getter for the score so the tree can access it
 	int depth;
+	bool hasChildren;
 
 };

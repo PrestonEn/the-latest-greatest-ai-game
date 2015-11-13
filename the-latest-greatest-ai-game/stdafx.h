@@ -2,7 +2,6 @@
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
-
 #pragma once
 
 #include <stdio.h>
@@ -14,6 +13,8 @@
 #include <limits.h>
 #include <deque>
 #include <list>
+
+
 #include "targetver.h"
 #include "Board.h"
 #include "BoardNode.h"

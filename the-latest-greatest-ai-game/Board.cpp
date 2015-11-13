@@ -11,6 +11,7 @@ Board::Board(){
 		}
 	}
 	_play_state = true;
+	last_move = 0;
 }
 
 
@@ -22,7 +23,7 @@ Board::Board(Board& genetic){
 		}
 	}
 	_play_state = genetic.state;
-	last_move = -1; //indicates no move has been made
+	last_move = genetic.last_move; //indicates no move has been made
 }
 
  
@@ -67,20 +68,19 @@ void Board::tetrisDrop(){
 }
 
 
-bool Board::applyMove(unsigned int col){
+bool Board::applyMove(int col){
 	col = col - 1; //easier to enter 1-8 then 0-7
 	
 	//unsigned short means 0-1 > 0
-	if (col > 7){
-		std::cout << "invalid move: columns are 1-8" << std::endl;
+	if (col > 7 || col < 0){
+		std::cout << "invalid move: columns are 1-8. Attempted move " << col <<std::endl;
 		return false;
 	}
 
 	unsigned short piece;
-	std::cout << "turn is " << _play_state;
+
 	if (_play_state){ piece = 1; }
 	else{ piece = 8; }
-	std::cout << " piece is " << piece << std::endl;
 	if (col_fill[col] > 7){
 		std::cout << "invalid move: column "<< col+1 << " is full" << std::endl;
 		return false;
@@ -116,7 +116,6 @@ bool Board::testWin(){
 					}
 					if (vertCount >= 4)
 					{
-						std::cout << "win for player at " << i << "," << j << "vertical" << std::endl;
 						return true;
 					}
 					///right lean case
@@ -131,7 +130,6 @@ bool Board::testWin(){
 					}
 					if (count >= 4)
 					{
-						std::cout << "win for player at " << i << "," << j << "left lean" << std::endl;
 						return true;
 					}
 					///end right lean case
@@ -146,7 +144,6 @@ bool Board::testWin(){
 					}
 					if (count >= 4)
 					{
-						std::cout << "win for player at " << i << "," << j << "right lean" << std::endl;
 						return true;
 					}
 				}
@@ -161,7 +158,6 @@ bool Board::testWin(){
 					if (state[i][horPos] == piece) horCount++;
 				}
 				if (horCount >= 4){
-					std::cout << "win for player at " << i << "," << j << "horizontal" << std::endl;
 					return true;
 				}
 			}

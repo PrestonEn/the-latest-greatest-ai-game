@@ -13,13 +13,12 @@ global_stuff glob_of_stuff;
 
 bool gameCycle(int move){
 	glob_of_stuff.board.applyMove(move);
-
+	glob_of_stuff.board.printState();
 	glob_of_stuff.game_done = glob_of_stuff.board.testWin();
 	if (glob_of_stuff.game_done)
 		return true;
 
 	glob_of_stuff.board._play_state = !glob_of_stuff.board._play_state; //next players turn
-	glob_of_stuff.board.printState();
 	return false;
 }
 
@@ -32,11 +31,11 @@ bool gameCycle(int move){
 ///<returns>32-bit unsigned integer, thread identifier</returns>
 ///
 DWORD WINAPI opponentThread(LPVOID lpParam){
-	int move_made = -1; //init to an impossible move
+	MinMax brain = MinMax();
+	bool move_made = false; //must wait for human move
+	int move = -1;
 	/*AI must ALWAYS be thinking about what to do, IE:THE THREAD LIVES UNTIL THE GAME DIES*/
 	while (true){
-		
-		
 		/*if the human has not made a move, the ai must begin thinking, by considering all possible
 		other moves the human can make*/
 
@@ -45,15 +44,26 @@ DWORD WINAPI opponentThread(LPVOID lpParam){
 		if(human_move == WAIT_OBJECT_0){
 			ResetEvent(glob_of_stuff.humanMoveFlag);
 			//test if game over, break out of loop
-			glob_of_stuff.game_done = gameCycle(2);
+			glob_of_stuff.game_done = gameCycle(move);
+			move = -1;
+			move_made = !move_made;
 			SetEvent(glob_of_stuff.opponentMoveFlag);
 			//set the event that the AI has moved
 		}
-		else{
+		else if (human_move == WAIT_TIMEOUT){
+			if (!move_made){
+				WaitForSingleObject(glob_of_stuff.humanMoveFlag, INFINITE);
+				SetEvent(glob_of_stuff.humanMoveFlag);
+				move_made = !move_made;
+			}
 
+			BoardNode* root = new BoardNode(glob_of_stuff.board);
+			root->generateChildren();
+			move = brain.buildAndSearch(root, 7);
+			
 		}
 
-		//once a human action is know, return the result from that tree
+		//once a human action is known, return the result from that tree
 		//clean up tree
 		//begin again
 	}
@@ -66,10 +76,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	unsigned int col; //!< user input for making move
 	glob_of_stuff.game_done = false;
 	bool validMv = false;
-	CreateThread(NULL, 0, opponentThread, NULL, 0, NULL);
 	/*create threads*/
 	glob_of_stuff.humanMoveFlag = CreateEvent(NULL, false, false, NULL);
-	glob_of_stuff.opponentMoveFlag = CreateEvent(NULL, false, false, NULL);
+	glob_of_stuff.opponentMoveFlag = CreateEvent(NULL, true, false, NULL);
+	CreateThread(NULL, 0, opponentThread, NULL, 0, NULL);
+
 	glob_of_stuff.board.printState();
 
 	while (!glob_of_stuff.game_done){
@@ -80,6 +91,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		validMv = false;
 		glob_of_stuff.game_done = glob_of_stuff.board.testWin();
+		if (glob_of_stuff.game_done){
+			break;
+		}
 		glob_of_stuff.board._play_state = !glob_of_stuff.board._play_state; //next players turn
 		SetEvent(glob_of_stuff.humanMoveFlag);
 		//wait for ai to make its move
@@ -87,7 +101,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	//WaitForSingleObject(glob_of_stuff.opponentMoveFlag, INFINITE); 
+	if (glob_of_stuff.board.state){
+		std::cout << "GAMEOVER: PLAYER ONE WINS";
+	}
+	else{
+		std::cout << "GAMEOVER: PLAYER TWO WINS";
 
+	}
 	int q;
 	std::cin >> q;
 	CloseHandle(glob_of_stuff.humanMoveFlag);

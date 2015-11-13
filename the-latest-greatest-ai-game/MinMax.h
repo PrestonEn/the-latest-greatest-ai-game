@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 
 
@@ -7,20 +8,13 @@
 class MinMax{
 private:
 	//given some boardnode, perform minimax search and return the appropriate move
-	int MinMax::moveSeach(BoardNode *origin, int ply, int maximizingTurn);
+	int MinMax::moveSeach(BoardNode *origin, int ply, bool maximizingTurn);
 
 
-public:
-	MinMax::MinMax();
-	
-	MinMax::~MinMax();
-
-	///
-	///
-	///
-	int MinMax::buildAndSearch(Board gameState, int ply);
-
-	
+public:	 
+	int allActs[8];
+	int MinMax::buildAndSearch(BoardNode* bnode, int ply);
+	int move; //minmax returns a 
 	std::deque<BoardNode*> frontier;
-	std::list<BoardNode*> explored 
+	std::list<BoardNode*> explored;
 };

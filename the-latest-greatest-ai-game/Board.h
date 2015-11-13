@@ -27,7 +27,7 @@ public:
 	///<param name="col"> the column attempting to move in </param>
 	///<param name="turn"> flag indicating whose turn it is </param>
 	///<returns>True if move is applied to the Board, False otherwise</returns>
-	bool Board::applyMove(unsigned int col);
+	bool Board::applyMove( int col);
 
 	///<summary>
 	///Tests the board for a string of 4, with horizontal wrapping
