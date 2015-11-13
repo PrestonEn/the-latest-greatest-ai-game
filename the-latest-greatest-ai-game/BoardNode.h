@@ -17,21 +17,17 @@ public:
 	///<summary>
 	///
 	///</summary>
-	BoardNode::BoardNode(Board b);
+	BoardNode::BoardNode(Board& b);
 	
 	///<summary>
 	///
 	///</summary>
-	BoardNode::~BoardNode();
+	//BoardNode::~BoardNode();
 
 	///<summary>
 	///
 	///</summary>
 	void BoardNode::generateChildren();
-
-	int score; //!<don't want to write a getter for the score so the tree can access it
-
-private:
 
 	///<summary>
 	///
@@ -39,6 +35,9 @@ private:
 	int BoardNode::evaluateState();
 
 	Board b; //!<considered state
+	BoardNode* parent;
 	BoardNode* children[8]; //!<insert childern into the index based on move
+	int score; //!<don't want to write a getter for the score so the tree can access it
+	int depth;
 
 };

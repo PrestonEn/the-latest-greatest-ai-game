@@ -10,7 +10,7 @@ Board::Board(){
 			state[i][j] = 0;
 		}
 	}
-	_play_state = false;
+	_play_state = true;
 }
 
 
@@ -22,6 +22,7 @@ Board::Board(Board& genetic){
 		}
 	}
 	_play_state = genetic.state;
+	last_move = -1; //indicates no move has been made
 }
 
  
@@ -66,7 +67,7 @@ void Board::tetrisDrop(){
 }
 
 
-bool Board::applyMove(unsigned int col, bool turn){
+bool Board::applyMove(unsigned int col){
 	col = col - 1; //easier to enter 1-8 then 0-7
 	
 	//unsigned short means 0-1 > 0
@@ -76,8 +77,8 @@ bool Board::applyMove(unsigned int col, bool turn){
 	}
 
 	unsigned short piece;
-	std::cout << "turn is " << turn;
-	if (turn){ piece = 1; }
+	std::cout << "turn is " << _play_state;
+	if (_play_state){ piece = 1; }
 	else{ piece = 8; }
 	std::cout << " piece is " << piece << std::endl;
 	if (col_fill[col] > 7){
@@ -88,16 +89,16 @@ bool Board::applyMove(unsigned int col, bool turn){
 		state[7-col_fill[col]][col] = piece;
 		col_fill[col]++;
 		tetrisDrop();
-		printState();
+		last_move = col;
 		return true;
 	}
 }
 
 
 
-bool Board::testWin(bool turn){
+bool Board::testWin(){
 	int piece;
-	if (turn) piece = 1;
+	if (_play_state) piece = 1;
 	else piece = 8;
 
 	for (int i = 0; i < 8; ++i){
@@ -168,3 +169,4 @@ bool Board::testWin(bool turn){
 	}
 	return false;
 }
+

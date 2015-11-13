@@ -27,17 +27,19 @@ public:
 	///<param name="col"> the column attempting to move in </param>
 	///<param name="turn"> flag indicating whose turn it is </param>
 	///<returns>True if move is applied to the Board, False otherwise</returns>
-	bool Board::applyMove(unsigned int col, bool turn);
+	bool Board::applyMove(unsigned int col);
 
 	///<summary>
 	///Tests the board for a string of 4, with horizontal wrapping
 	///</summary>
 	///<param name="turn">Player who's turn we are testing or win condition on</param>
-	bool Board::testWin(bool turn);
+	bool Board::testWin();
 
-private:
 	///used to indicate min or max
 	bool _play_state;
+
+	///move creating current state
+	int last_move;
 
 	///Board itself
 	unsigned char state[8][8];

@@ -10,8 +10,12 @@
 #include <io.h>
 #include <fcntl.h>
 #include <Windows.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <deque>
+#include <list>
 #include "targetver.h"
 #include "Board.h"
 #include "BoardNode.h"
-
+#include "MinMax.h"
 // TODO: reference additional headers your program requires here

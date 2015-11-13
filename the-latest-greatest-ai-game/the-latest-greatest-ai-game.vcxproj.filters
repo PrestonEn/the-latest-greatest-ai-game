@@ -27,10 +27,10 @@
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MinMax.h">
+    <ClInclude Include="BoardNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoardNode.h">
+    <ClInclude Include="MinMax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -45,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoardNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MinMax.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

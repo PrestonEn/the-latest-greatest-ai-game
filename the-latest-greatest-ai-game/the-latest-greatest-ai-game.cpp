@@ -4,47 +4,93 @@
 typedef struct{
 	HANDLE humanMoveFlag; //!<used to indicate to ai that human move is made
 	HANDLE opponentMoveFlag; //!<used to indicate ai has returned a move
-	Board *board;	 //!<pointer to active game board
-	bool game_state; //!<who's turn is it?
+	Board board;	 //!<pointer to active game board
 	bool game_done; //!< is the game over?
+	int humanMove;
 }global_stuff;
 
 global_stuff glob_of_stuff;
 
+bool gameCycle(int move){
+	glob_of_stuff.board.applyMove(move);
+
+	glob_of_stuff.game_done = glob_of_stuff.board.testWin();
+	if (glob_of_stuff.game_done)
+		return true;
+
+	glob_of_stuff.board._play_state = !glob_of_stuff.board._play_state; //next players turn
+	glob_of_stuff.board.printState();
+	return false;
+}
+
+///
 ///<summary>
 ///Create a windows API thread to operate the opponents
 ///thought
 ///</summary>
 ///<param name="lpParam">Void pointer type allowing arbitrary struct to be passed</param>
 ///<returns>32-bit unsigned integer, thread identifier</returns>
+///
 DWORD WINAPI opponentThread(LPVOID lpParam){
-	//if the human has not made a move, the ai must begin thinking, by considering all possible
-	//other moves the human can make
+	int move_made = -1; //init to an impossible move
+	/*AI must ALWAYS be thinking about what to do, IE:THE THREAD LIVES UNTIL THE GAME DIES*/
+	while (true){
+		
+		
+		/*if the human has not made a move, the ai must begin thinking, by considering all possible
+		other moves the human can make*/
+
+		DWORD human_move = WaitForSingleObject(glob_of_stuff.humanMoveFlag, 0);
+		
+		if(human_move == WAIT_OBJECT_0){
+			ResetEvent(glob_of_stuff.humanMoveFlag);
+			//test if game over, break out of loop
+			glob_of_stuff.game_done = gameCycle(2);
+			SetEvent(glob_of_stuff.opponentMoveFlag);
+			//set the event that the AI has moved
+		}
+		else{
+
+		}
 
 		//once a human action is know, return the result from that tree
 		//clean up tree
 		//begin again
+	}
+	return 1;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	Board b = Board(); //!< the board used for the active game
-	unsigned int col; //!< user input for making moves
-	glob_of_stuff.game_state = true;
+	glob_of_stuff.board = Board(); //!< the board used for the active game
+	unsigned int col; //!< user input for making move
 	glob_of_stuff.game_done = false;
+	bool validMv = false;
+	CreateThread(NULL, 0, opponentThread, NULL, 0, NULL);
+	/*create threads*/
+	glob_of_stuff.humanMoveFlag = CreateEvent(NULL, false, false, NULL);
+	glob_of_stuff.opponentMoveFlag = CreateEvent(NULL, false, false, NULL);
+	glob_of_stuff.board.printState();
 
 	while (!glob_of_stuff.game_done){
-		std::cin >> col;
-		b.applyMove(col, glob_of_stuff.game_state);
-		glob_of_stuff.game_done = b.testWin(glob_of_stuff.game_state);
-
-		glob_of_stuff.game_state = !glob_of_stuff.game_state; //next players turn
+		while (!validMv){
+			std::cin >> col;
+			validMv = glob_of_stuff.board.applyMove(col);
+			glob_of_stuff.board.printState();
+		}
+		validMv = false;
+		glob_of_stuff.game_done = glob_of_stuff.board.testWin();
+		glob_of_stuff.board._play_state = !glob_of_stuff.board._play_state; //next players turn
+		SetEvent(glob_of_stuff.humanMoveFlag);
+		//wait for ai to make its move
+		WaitForSingleObject(glob_of_stuff.opponentMoveFlag, INFINITE);
 	}
 
+	//WaitForSingleObject(glob_of_stuff.opponentMoveFlag, INFINITE); 
 
 	int q;
-	std::cout << "Press any key to quit!";
 	std::cin >> q;
-	return 0;
+	CloseHandle(glob_of_stuff.humanMoveFlag);
+	CloseHandle(glob_of_stuff.opponentMoveFlag);
 }
 
