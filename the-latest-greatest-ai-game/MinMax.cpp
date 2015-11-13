@@ -4,7 +4,7 @@
 #include "MinMax.h"
 
 int MinMax::moveSeach(BoardNode *node, int depth, bool maximizingTurn){
-
+	node->b.printState();
 	if (depth == 0 || !node->hasChildren){
 		return node->evaluateState();
 	}
@@ -53,9 +53,10 @@ int MinMax::buildAndSearch(BoardNode* bnode, int ply){
 	
 	int act=-1;
 	int val = INT_MIN;
-	std::cout << "THE CHILDREN" << std::endl;
+	//std::cout << "THE CHILDREN" << std::endl;
 	for (auto p : bnode->children){
-		p->b.printState();
+		//p->b.printState();
+		//std::cout << "STATE SCORE" << p->score  << std::endl;
 		p->score = moveSeach(p, ply, !p->b._play_state);
 		if (p->score > val){
 
@@ -65,7 +66,7 @@ int MinMax::buildAndSearch(BoardNode* bnode, int ply){
 		}
 
 	}
-	std::cout << "END THE CHILDREN" << std::endl;
+	//std::cout << "END THE CHILDREN" << std::endl;
 
 	if (act == -1){
 		return rand() % 8 + 1;

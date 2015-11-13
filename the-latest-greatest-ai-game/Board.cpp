@@ -22,7 +22,7 @@ Board::Board(Board& genetic){
 			state[i][j] = genetic.state[i][j];
 		}
 	}
-	_play_state = genetic.state;
+	_play_state = !genetic.state;
 	last_move = genetic.last_move; //indicates no move has been made
 }
 
